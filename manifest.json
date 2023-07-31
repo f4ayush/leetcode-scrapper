@@ -1,0 +1,14 @@
+{
+    "name": "Leetcode Scrapper",
+    "version": "1.0.0",
+    "description": "Push previously solved questions to github",
+    "manifest_version": 3,
+    "author": "Ayush Raj Anand",
+    
+    "content_scripts": [
+        {
+          "matches": ["https://*.leetcode.com/*"],
+          "js": ["scripts/content.js"]
+        }
+      ]
+}
