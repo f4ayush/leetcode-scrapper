@@ -1,22 +1,37 @@
-const article = document.querySelector("article");
-
-// `document.querySelector` may return null if the selector doesn't match anything.
-if (article) {
-  const text = article.textContent;
-  const wordMatchRegExp = /[^\s]+/g; // Regular expression
-  const words = text.matchAll(wordMatchRegExp);
-  // matchAll returns an iterator, convert to array to get word count
-  const wordCount = [...words].length;
-  const readingTime = Math.round(wordCount / 200);
-  const badge = document.createElement("p");
-  // Use the same styling as the publish information in an article's header
-  badge.classList.add("color-secondary-text", "type--caption");
-  badge.textContent = `⏱️ ${readingTime} min read`;
-
-  // Support for API reference docs
-  const heading = article.querySelector("h1");
-  // Support for article docs with date
-  const date = article.querySelector("time")?.parentNode;
-
-  (date ?? heading).insertAdjacentElement("afterend", badge);
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+const submissionTable = document.querySelector("#submission-list-app");
+const submissionRows = submissionTable.querySelectorAll("tr");
+
+/* submissionRows.forEach(row => {
+  
+}); */
+// await sleep(5000);
+
+chrome.browserAction.onClicked.addListener(function (tab) {
+  // Send a message to the content script to change the background color
+  chrome.tabs.sendMessage(tab.id, { action: "changeColor" });
+});
+
+console.log(chrome.browserAction, chrome)
+// Listen for click events on the page
+document.addEventListener("click", function (event) {
+  // Check if the clicked element is an anchor tag (link)
+  const clickedElement = event.target;
+  if (clickedElement.className === "text-success") {
+    // Prevent the link from opening immediately
+    event.preventDefault();
+
+    // Get the link URL
+    const linkUrl = clickedElement.href;
+
+    // Open a new tab with the link URL
+    chrome.tabs.create({ url: linkUrl }, function (newTab) {
+      // Once the new tab is opened, inject a content script to read data from the new page
+      chrome.tabs.executeScript(newTab.id, { file: "scripts/readDataScript.js" });
+    });
+  }
+});
+console.log(submissionTable)
