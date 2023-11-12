@@ -9,6 +9,10 @@
         {
           "matches": ["https://*.leetcode.com/*"],
           "js": ["scripts/content.js"]
+        },
+        {
+          "matches": ["https://*.leetcode.com/submissions/detail/*"],
+          "js": ["scripts/readDataScript.js"]
         }
       ],
       "background": {
