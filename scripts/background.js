@@ -27,14 +27,15 @@ chrome.runtime.onMessage.addListener(
       // chrome.scripting.executeScript({ function:()=>{console.log("hiiiiiiiiiiiii")}, target: { tabId: tab.id }, injectImmediately: true })
       sendResponse({ sender: sender.tab });
 
-    } else if (request.message === "download_file") {
-      var blob = new Blob(request.code, { type: "text/plain" });
-      var url = window.URL.createObjectURL(blob);
-      chrome.downloads.download({
-        url: url, // The object URL can be used as download URL
-        filename: request.filename
-      });
-      sendResponse({ sender: "success" });
+    } else if (request.message === "close_tab") {
+      chrome.tabs.getCurrent(
+        (tab)=>{
+          chrome.tabs.remove(
+           tab.id
+          )
+        }
+      )
+      
     }
     // sendResponse({ sender: sender.tab })
 
