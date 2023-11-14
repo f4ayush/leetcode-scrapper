@@ -4,7 +4,7 @@
     "description": "Push previously solved questions to github",
     "manifest_version": 3,
     "author": "Ayush Raj Anand",
-    "permissions": ["activeTab", "tabs"],
+    "permissions": ["activeTab", "tabs", "downloads"],
     "content_scripts": [
         {
           "matches": ["https://*.leetcode.com/*"],

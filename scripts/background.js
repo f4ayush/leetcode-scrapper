@@ -25,9 +25,16 @@ chrome.runtime.onMessage.addListener(
         { url: request.url }
       )
       // chrome.scripting.executeScript({ function:()=>{console.log("hiiiiiiiiiiiii")}, target: { tabId: tab.id }, injectImmediately: true })
-      sendResponse({sender: sender.tab });
-      return true;
+      sendResponse({ sender: sender.tab });
 
+    } else if (request.message === "download_file") {
+      var blob = new Blob(request.code, { type: "text/plain" });
+      var url = window.URL.createObjectURL(blob);
+      chrome.downloads.download({
+        url: url, // The object URL can be used as download URL
+        filename: request.filename
+      });
+      sendResponse({ sender: "success" });
     }
     // sendResponse({ sender: sender.tab })
 
